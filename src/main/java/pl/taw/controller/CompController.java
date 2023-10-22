@@ -1,11 +1,12 @@
 /**
  * Created by tomasz_taw
  * Date: 22.10.2023
- * Time: 12:49
+ * Time: 14:20
  * Project Name: guessTheNumber
  * Description:
  */
 package pl.taw.controller;
+
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -23,10 +24,10 @@ import java.util.Random;
 @Controller
 @NoArgsConstructor
 @AllArgsConstructor
-@RequestMapping(GameController.GAME)
-public class GameController {
+@RequestMapping(CompController.COMP)
+public class CompController {
 
-    public static final String GAME = "/game";
+    public static final String COMP = "/comp";
 
     private int secretNumber;
     private boolean focusNewGameButton;
@@ -35,17 +36,17 @@ public class GameController {
     private GuessHistory guessHistory;
 
     @GetMapping
-    public String gamePage(Model model) {
+    public String newPageGamePage(Model model) {
         secretNumber = generateRandomNumber();
         guessHistory.resetGuesses();
         boolean gameEnded = false;
         model.addAttribute("gameEnded", gameEnded);
         model.addAttribute("message", "Zgadnij liczbę od 1 do 100.");
-        return "game";
+        return "newPageGame";
     }
 
     @PostMapping
-    public String checkGuess(@RequestParam("guess") int guess, Model model) {
+    public String newCheckGuess(@RequestParam("guess") int guess, Model model) {
         boolean gameEnded = false;
         guessHistory.addGuesses(guess);
         if (guess < secretNumber) {
@@ -62,41 +63,23 @@ public class GameController {
             model.addAttribute("message", "Brawo, zgadłeś liczbę!");
         }
         model.addAttribute("history", guessHistory.getGuesses());
-        return "game";
+        return "newPageGame";
     }
 
     @PostMapping("/new-game")
-    public String newGame() {
+    public String newNewGame() {
         secretNumber = generateRandomNumber();
         guessHistory.resetGuesses();
-        return "redirect:/game";
+        return "redirect:/comp";
     }
 
 
 
-    // TODO do zrobienia podsumowanie gry, może lepiej to będzie zrobić na tej samej stronie
-
-    @GetMapping("/end-game")
-    public String endGame(Model model) {
-        int score = calculateScore();
-
-
-        model.addAttribute("message", "Gra zakończona. Twój wynik to: " + score);
-
-
-        return "endGame";
-    }
-
-    private int calculateScore() {
-
-
-        int score = 100;
-
-        return score;
-    }
 
     private int generateRandomNumber() {
         return new Random().nextInt(100) + 1;
     }
+
+
 
 }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Gra w zgadywanie liczby - najnowszy widok</title>
+
+    <style>
+        ol {
+            display: flex;
+            justify-content: center;
+        }
+        li {
+            margin-left: 40px;
+        }
+        .num {
+            font-size: 40px;
+        }
+        img {
+            width: 900;
+            height: auto;
+        }
+        .container {
+            text-align: center;
+        }
+
+        .input-comp {
+            position: absolute;
+            top: 31%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            font-size: 90px;
+        }
+        form {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Gra w zgadywanie liczby</h1>
+
+    <p th:text="${message}"></p>
+
+
+    <div style="position: relative;">
+        <img th:src="@{/images/comp-img.png}" alt="Obrazek z polem input" style="width: 720px; height: 400px;">
+        <form method="post" action="/comp">
+            <label for="guess">Twoja propozycja:</label>
+            <input type="number" id="guess" name="guess" class="input-comp" required autofocus th:disabled="${gameEnded}">
+            <button type="submit" th:disabled="${gameEnded}">Sprawdź</button>
+        </form>
+    </div>
+
+    <form method="post" action="/comp/new-game">
+        <button id="newGameButton" type="submit">Nowa gra</button>
+    </form>
+    <button><a th:href="@{/}">Powrót do strony głównej</a></button>
+
+    <h2>Historia zgadywań:</h2>
+    <ol>
+        <li th:each="guess : ${history}" ><span th:text="${guess}" class="num"></span></li>
+    </ol>
+
+    <script th:inline="javascript">
+        var focusNewGameButton = [[${focusNewGameButton}]]
+
+        if (focusNewGameButton) {
+            document.getElementById("newGameButton").focus();
+        }
+    </script>
+
+</div>
+
+</body>
+</html>
+

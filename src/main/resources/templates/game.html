@@ -2,23 +2,50 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Game</title>
+    <title>Gra w zgadywanie liczby</title>
+
+    <style>
+        ol {
+            display: flex;
+        }
+        li {
+            margin-left: 40px;
+        }
+        .num {
+            font-size: 40px;
+        }
+    </style>
 </head>
 <body>
-<h1>Game: Zgadnij liczbę</h1>
 
+<h1>Gra w zgadywanie liczby</h1>
 <p th:text="${message}"></p>
 
 <form method="post" action="/game">
     <label for="guess">Twoja propozycja:</label>
-    <input type="number" id="guess" name="guess" required>
-    <button type="submit">Sprawdź</button>
+    <input type="number" id="guess" name="guess" required autofocus th:disabled="${gameEnded}">
+    <button type="submit" th:disabled="${gameEnded}">Sprawdź</button>
 </form>
 
+<!-- Dodaj przycisk "Nowa gra" -->
+<form method="post" action="/game/new-game">
+    <button id="newGameButton" type="submit">Nowa gra</button>
+</form>
+<button><a th:href="@{/}">Powrót do strony głównej</a></button>
+
 <h2>Historia zgadywań:</h2>
-<ul>
-    <li th:each="guess : ${guessHistory.guesses}" th:text="${guess}"></li>
-</ul>
+<ol>
+    <li th:each="guess : ${history}" ><span th:text="${guess}" class="num"></span></li>
+</ol>
+
+<script th:inline="javascript">
+    var focusNewGameButton = [[${focusNewGameButton}]]
+
+    if (focusNewGameButton) {
+        document.getElementById("newGameButton").focus();
+    }
+</script>
 
 </body>
 </html>
+
