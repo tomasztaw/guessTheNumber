@@ -60,6 +60,12 @@ public class GameController {
             model.addAttribute("gameEnded", gameEnded);
             model.addAttribute("focusNewGameButton", focusNewGameButton);
             model.addAttribute("message", "Brawo, zgadłeś liczbę!");
+
+
+
+            int score = calculateScore(guessHistory.getGuesses().size()); // Funkcja, która oblicza wynik gry
+            model.addAttribute("score", score);
+
         }
         model.addAttribute("history", guessHistory.getGuesses());
         return "game";
@@ -77,20 +83,17 @@ public class GameController {
     // TODO do zrobienia podsumowanie gry, może lepiej to będzie zrobić na tej samej stronie
 
     @GetMapping("/end-game")
-    public String endGame(Model model) {
-        int score = calculateScore();
-
+    public String endGame(Model model, Integer numberOfGuests) {
+        int score = calculateScore(numberOfGuests);
 
         model.addAttribute("message", "Gra zakończona. Twój wynik to: " + score);
-
 
         return "endGame";
     }
 
-    private int calculateScore() {
+    private int calculateScore(Integer numberOfGuests) {
 
-
-        int score = 100;
+        int score = 100 - (numberOfGuests * 5);
 
         return score;
     }

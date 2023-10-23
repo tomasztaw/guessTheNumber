@@ -38,6 +38,11 @@
     <li th:each="guess : ${history}" ><span th:text="${guess}" class="num"></span></li>
 </ol>
 
+<div id="result-section" th:if="${gameEnded}">
+    <p>Wynik gry: <span th:text="${score}"></span></p>
+</div>
+
+
 <script th:inline="javascript">
     var focusNewGameButton = [[${focusNewGameButton}]]
 
